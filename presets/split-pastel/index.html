@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Split Pastel · 粉彩分割 · 3:4 图文卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#f5e6dc;--t1:#2a2a2a;--t2:#555;--tm:#999;--cr:#c8f0d8;--gd:#f0d4e0;--fd:'Outfit',sans-serif;--fb:'Outfit',sans-serif;--pad:52px}
+*,*::after,*::before{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#e4dff0;font-family:var(--fb);color:var(--t1)}
+.dv{position:fixed;inset:0;background:#e4dff0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ds{width:1080px;height:1440px;position:relative;background:var(--cream);box-shadow:0 16px 56px rgba(0,0,0,.15);transform-origin:center center;overflow:hidden}
+.s{position:absolute;inset:0;width:1080px;height:1440px;padding:var(--pad);visibility:hidden;opacity:0;transition:opacity .5s;pointer-events:none;z-index:0;display:flex;flex-direction:column}
+.s.active{visibility:visible;opacity:1;pointer-events:auto;z-index:1}
+.s h2{font-family:var(--fd);font-size:55px;font-weight:600;line-height:1.1;color:var(--t1);margin-bottom:6px}
+.s p{font-family:var(--fb);font-size:40px;line-height:1.6;color:var(--t2);margin-bottom:14px}
+.s .sm{font-size:31px;line-height:1.5}
+.s .xs{font-size:25px;line-height:1.45}
+.ar{width:35px;height:2px;background:var(--cr);margin-bottom:8px;flex-shrink:0}
+.dc::first-letter{font-family:var(--fd);font-size:88px;font-weight:700;color:var(--cr);float:left;line-height:.7;margin-right:5px;margin-top:3px}
+.pq{font-family:var(--fb);font-size:38px;font-style:italic;color:var(--cr);line-height:1.35;padding:10px 0;margin:6px 0 8px;border-top:2px solid var(--cr);border-bottom:2px solid var(--cr);text-align:center;flex-shrink:0}
+.mt{font-family:var(--fb);font-size:20px;font-weight:600;color:var(--cr);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;flex-shrink:0}
+.nm{font-family:var(--fd);font-size:50px;font-weight:700;color:var(--cr);line-height:.8;opacity:.07;position:absolute;top:14px;right:20px;pointer-events:none}
+.pg{position:absolute;bottom:16px;right:24px;font-family:var(--fd);font-size:30px;color:var(--tm);letter-spacing:1px}
+.cb{background:#e4dff0;border-radius:3px;padding:10px 14px}
+.txt{flex:1;display:flex;flex-direction:column;justify-content:center}
+.imgbx{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100px}
+.imgbx img{max-width:90%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:2px;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.imgbx .cap{font-family:var(--fb);font-size:22px;color:var(--tm);font-style:italic;margin-top:6px;text-align:center;max-width:90%;flex-shrink:0}
+.sc{padding:0}
+.sc .ci{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.sc .cg{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0,rgba(0,0,0,.35) 40%,rgba(0,0,0,.05) 100%)}
+.sc .cc{position:absolute;bottom:80px;left:56px;right:56px;color:#fff}
+.sc .cr{width:60px;height:3px;background:var(--cr);margin-bottom:22px}
+.sc h1{font-family:var(--fd);font-size:72px;font-weight:600;line-height:1.02;color:#fff;margin-bottom:10px}
+.sc .sub{font-family:var(--fb);font-size:32px;font-weight:400;opacity:.85;margin-bottom:4px}
+.sc .meta{font-size:22px;opacity:.6;margin-top:10px}
+.sp{display:flex;gap:36px;align-items:center;flex:1}
+.sp .simg{flex:0 0 44%;height:68%;object-fit:cover;border-radius:2px;display:block}
+.sp .stxt{flex:1}
+.sp .stxt h2{font-family:var(--fd);font-size:72px;font-weight:600;line-height:1.05;margin-bottom:6px;color:var(--t1)}
+.sp .stxt .ln{width:48px;height:2px;background:var(--cr);margin-bottom:14px}
+.sp .stxt p{font-size:52px;line-height:1.4;margin-bottom:8px;color:var(--t2)}
+.sit{padding:0;display:flex;flex-direction:column}
+.sit .hi{width:100%;height:50%;object-fit:cover;display:block;flex-shrink:0}
+.sit .ht{padding:40px 48px 48px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.sit .ht .tag{font-family:var(--fb);font-size:28px;font-weight:600;color:var(--cr);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.sit .ht h2{font-size:72px;margin-bottom:10px}
+.sit .ht p{font-size:48px;line-height:1.4;margin-bottom:0}
+.ed{overflow-y:auto}
+.ed .byline{font-family:var(--fb);font-size:32px;color:var(--cr);margin-bottom:18px}
+.ed .hr{width:100%;height:1px;background:#ccc;margin-bottom:18px;flex-shrink:0}
+.ed p{font-size:52px;line-height:1.45;margin-bottom:12px;color:var(--t2)}
+.ed .fig{margin:16px 0 12px;text-align:center;flex-shrink:0}
+.ed .fig img{max-width:80%;height:auto;border-radius:2px;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+.ed .fig .cap{font-size:32px;color:var(--tm);margin-top:4px;font-style:italic}
+.nav{position:fixed;top:50%;left:0;right:0;transform:translateY(-50%);display:flex;align-items:center;justify-content:space-between;z-index:100;pointer-events:none;padding:0 12px}
+.nav button{width:48px;height:48px;border-radius:50%;border:none;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);cursor:pointer;font-size:20px;color:#333;transition:all .2s;pointer-events:auto;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+.nav button:hover{background:var(--cr);color:#fff}
+.pgcnt{position:fixed;bottom:24px;right:28px;font-family:var(--fb);font-size:22px;color:var(--tm);z-index:100;pointer-events:none}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s cubic-bezier(.16,1,.3,1)}
+.s.active .rv{opacity:1;transform:translateY(0)}
+@media print{.dv{position:static;overflow:visible;display:block;background:none}.ds{transform:none!important;width:100%;height:auto;box-shadow:none}.s{position:static;visibility:visible;opacity:1;break-after:page;height:auto;min-height:1440px;width:100%}.nav,.pgcnt{display:none}}
+</style>
+</head>
+<body>
+<div class="dv"><div class="ds" id="stage">
+
+<section class="s sc active" data-index="1">
+<img class="ci" src="https://picsum.photos/seed/split-pastel/1080/1440" alt="" onerror="this.style.display='none'">
+<div class="cg"></div>
+<div class="cc"><div class="cr rv"></div><h1 class="rv">Split Pastel</h1><p class="sub rv">俏皮、现代、友好</p><p class="meta rv">3:4 图文卡片 · split-pastel</p></div>
+<span class="pg">01</span>
+</section>
+
+<section class="s sp" data-index="2">
+<img class="simg" src="https://picsum.photos/seed/split-pastel-split/480/680" alt="" onerror="this.style.display='none'">
+<div class="stxt"><h2 class="rv">设计即沟通</h2><div class="ln rv"></div><p class="rv">好的设计不是装饰，而是沟通本身。每一个色彩选择、每一处留白、每一种字体，都在无声地传递信息。</p><p class="rv">正文 40px，行距 1.6，每页约 20 行汉字。</p></div>
+<span class="pg">02</span>
+</section>
+
+<section class="s sit" data-index="3">
+<img class="hi" src="https://picsum.photos/seed/split-pastel-hero/1080/780" alt="" onerror="this.style.display='none'">
+<div class="ht"><p class="tag rv">设 计 理 念</p><h2 class="rv">少即是多</h2><p class="rv">左右分色背景、标签药丸、右侧网格纹理叠加、圆角按钮</p></div>
+<span class="pg">03</span>
+</section>
+
+<section class="s ed" data-index="4">
+<h2 class="rv">排版的艺术</h2>
+<p class="byline rv">设计系统 · Split Pastel · 粉彩分割</p>
+<div class="hr rv"></div>
+<p class="dc rv">排版是设计的骨架。字体的大小、粗细、行距、字距——每一个参数都在塑造阅读的节奏和情感。好的排版让人感觉不到排版的存在。</p>
+<p class="rv">真正的设计高手，懂得让内容自己说话。装饰不是越多越好，而是每一笔都有存在的理由。</p>
+<div class="pq rv">"设计是把意图变成现实的过程。"</div>
+<p class="rv">保持一致性比追求新奇更重要。好的设计系统，能让内容在任何场景下都保持清晰和有力。</p>
+<span class="pg">04</span>
+</section>
+
+</div></div>
+<div class="nav"><button id="p">◀</button><button id="n">▶</button></div>
+<div class="pgcnt" id="pgcnt">1/4</div>
+<script>(function() {
+    var stage = document.getElementById('stage');
+    var slides = document.querySelectorAll('.s');
+    var counter = document.getElementById('pgcnt');
+    var cur = 0, tot = slides.length;
+
+    function resize() {
+        var s = Math.min(innerWidth/1080, innerHeight/1440) * 0.94;
+        stage.style.transform = 'scale(' + s + ')';
+    }
+
+    function go(i) {
+        if (i < 0) i = 0;
+        if (i >= tot) i = tot - 1;
+        if (i === cur) return;
+        for (var j = 0; j < tot; j++) {
+            slides[j].classList.toggle('active', j === i);
+        }
+        cur = i;
+        counter.textContent = (cur + 1) + '/' + tot;
+        var a = slides[cur];
+        a.style.transition = 'none';
+        a.style.opacity = '0.99';
+        requestAnimationFrame(function() {
+            a.style.transition = '';
+            a.style.opacity = '';
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(cur - 1);
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') go(cur + 1);
+    });
+
+    document.getElementById('p').addEventListener('click', function() { go(cur - 1); });
+    document.getElementById('n').addEventListener('click', function() { go(cur + 1); });
+
+    var tx = 0;
+    stage.addEventListener('touchstart', function(e) { tx = e.changedTouches[0].screenX; });
+    stage.addEventListener('touchend', function(e) {
+        var d = tx - e.changedTouches[0].screenX;
+        if (Math.abs(d) > 60) d > 0 ? go(cur + 1) : go(cur - 1);
+    });
+
+    resize();
+    window.addEventListener('resize', resize);
+    counter.textContent = '1/' + tot;
+
+    for (var k = 0; k < tot; k++) {
+        var pg = slides[k].querySelector('.pg');
+        if (pg) {
+            pg.textContent = (k + 1).toString().padStart(2,'0') + '/' + tot.toString().padStart(2,'0');
+        }
+    }
+})();</script>
+</body>
+</html>

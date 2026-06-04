@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>当 AI 遇上 2% 定律 · 图文卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#faf9f7;--t1:#1a1a1a;--t2:#3a3a3a;--tm:#777;--cr:#b81c34;--fd:'Cormorant Garamond','Times New Roman',serif;--fb:'Source Serif 4',Georgia,serif;--pad:52px}
+*,*::after,*::before{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#ddd8d0;font-family:var(--fb);color:var(--t1)}
+.dv{position:fixed;inset:0;background:#ddd8d0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ds{width:1080px;height:1440px;position:relative;background:var(--cream);box-shadow:0 16px 56px rgba(0,0,0,.12);transform-origin:center center;overflow:hidden}
+.s{position:absolute;inset:0;width:1080px;height:1440px;padding:var(--pad);visibility:hidden;opacity:0;transition:opacity .5s;pointer-events:none;z-index:0;display:flex;flex-direction:column}
+.s.active{visibility:visible;opacity:1;pointer-events:auto;z-index:1}
+.s h2{font-family:var(--fd);font-size:55px;font-weight:600;line-height:1.1;color:var(--t1);margin-bottom:6px}
+.s p{font-family:var(--fb);font-size:40px;line-height:1.6;color:var(--t2);margin-bottom:14px}
+.s .sm{font-size:31px;line-height:1.5}
+.s .xs{font-size:25px;line-height:1.45}
+.ar{width:35px;height:2px;background:var(--cr);margin-bottom:8px;flex-shrink:0}
+.dc::first-letter{font-family:var(--fd);font-size:88px;font-weight:700;color:var(--cr);float:left;line-height:.7;margin-right:5px;margin-top:3px}
+.pq{font-family:var(--fb);font-size:38px;font-style:italic;color:var(--cr);line-height:1.35;padding:10px 0;margin:6px 0 8px;border-top:2px solid var(--cr);border-bottom:2px solid var(--cr);text-align:center;flex-shrink:0}
+.mt{font-family:var(--fb);font-size:20px;font-weight:600;color:var(--cr);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;flex-shrink:0}
+.nm{font-family:var(--fd);font-size:50px;font-weight:700;color:var(--cr);line-height:.8;opacity:.07;position:absolute;top:14px;right:20px;pointer-events:none}
+.pg{position:absolute;bottom:16px;right:24px;font-family:var(--fd);font-size:30px;color:#bbb;letter-spacing:1px}
+.sc{background:var(--cream)}
+.sc .ta{padding:14px 0 0}
+.sc h1{font-family:var(--fd);font-size:72px;font-weight:600;line-height:1.02;color:var(--t1);margin-bottom:4px}
+.sc .sub{font-family:var(--fb);font-size:44px;font-weight:400;color:#444;margin-bottom:4px}
+.sc .meta{font-size:32px;color:#555;margin-top:6px}
+.sc .stats{font-size:28px;color:#888;margin-top:4px;font-style:italic}
+.sc .cr{width:40px;height:2px;background:var(--cr);margin:10px 0 14px}
+.imgbx{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100px}
+.imgbx img{max-width:90%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:2px;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.imgbx .cap{font-family:var(--fb);font-size:22px;color:var(--tm);font-style:italic;margin-top:6px;text-align:center;max-width:90%;flex-shrink:0}
+.txt{flex:1;display:flex;flex-direction:column;justify-content:center}
+.nav{position:fixed;top:50%;left:0;right:0;transform:translateY(-50%);display:flex;align-items:center;justify-content:space-between;z-index:100;pointer-events:none;padding:0 12px}
+.nav button{width:48px;height:48px;border-radius:50%;border:none;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);cursor:pointer;font-size:20px;color:var(--t1);transition:all .2s;pointer-events:auto;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+.nav button:hover{background:var(--cr);color:#fff}
+.nav .ind{display:none}
+.page-counter{position:fixed;bottom:24px;right:28px;font-family:var(--fb);font-size:22px;color:#aaa;z-index:100;pointer-events:none}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s cubic-bezier(.16,1,.3,1)}
+.s.active .rv{opacity:1;transform:translateY(0)}
+.s.active .rv:nth-child(1){transition-delay:.03s}
+.s.active .rv:nth-child(2){transition-delay:.10s}
+.s.active .rv:nth-child(3){transition-delay:.18s}
+.s.active .rv:nth-child(4){transition-delay:.26s}
+.s.active .rv:nth-child(5){transition-delay:.34s}
+.s.active .rv:nth-child(6){transition-delay:.42s}
+@media print{
+.dv{position:static;overflow:visible;display:block;background:0 0}
+.ds{transform:none!important;width:100%;height:auto;box-shadow:none}
+.s{position:static;visibility:visible;opacity:1;break-after:page;height:auto;min-height:1440px;width:100%}
+.nav{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="dv">
+<div class="ds" id="stage">
+
+<!-- 1 · 封面 + 开场 -->
+<section class="s sc active" data-index="1">
+<div class="ta rv">
+<h1>当 AI 遇上<br>2% 定律</h1>
+<p class="sub">一个增长经济学家的推理</p>
+<p class="meta">Chad Jones 教授 · 斯坦福商学院 2026 年演讲</p>
+<p class="stats">全文约 3600 字 · 预计阅读 9 分钟</p>
+<div class="cr"></div>
+</div>
+<div class="txt rv">
+<p>2016 年，多伦多。Geoff Hinton——诺贝尔奖得主、深度神经网络的奠基人——站在台上说：别培养放射科医师了。五年之内，AI 会比他们做得好，这个职业会消失。</p>
+<p>台下坐着 Chad Jones，斯坦福大学的经济学教授，研究了一辈子经济增长。他记住了这句话。</p>
+<p>十年后，美国的放射科医师比 2016 年还要多，收入也更高。</p>
+<p>这不是 Hinton 错了。AI 读片确实已经比人类强了。但问题在于：<strong>工作是一堆任务的组合。</strong> 读片只是放射科医师大约一百项任务中的一项。当 AI 能做其中 75 项，剩下的 25 项——跟外科医生讨论手术方案、复核疑难病例、跟患者沟通——就成了短板。<strong>稀缺的东西会变贵。</strong> 所以他们的工资反而涨了。</p>
+</div>
+<span class="pg">01</span>
+</section>
+
+<!-- 2 · 薄弱环节钥匙 + 一、两个极端 -->
+<section class="s" data-index="2">
+<span class="nm">01</span>
+<div class="txt rv">
+<p>这个不起眼的洞察——"薄弱环节"——是 Jones 教授理解 AI 经济影响的钥匙。用它一撬，露出一个反直觉的真相：<strong>AI 可能是我们这辈子见过的最具变革性的技术，但经济增长的爆发会来得比你想象中慢得多；而真正的风险，可能快到你来不及反应。</strong></p>
+<p><strong>一、两个极端：先画一个坐标系</strong></p>
+<p>Jones 教授要大家先想两个极端场景。不是因为它们会真实发生，而是——画出了边界，中间的地带才好理解。</p>
+<p><strong>场景一：硅谷的繁荣叙事。</strong></p>
+</div>
+<span class="pg">02</span>
+</section>
+
+<!-- 3 · 场景一全文 -->
+<section class="s" data-index="3">
+<span class="nm">02</span>
+<div class="txt rv">
+<p>故事是这样的。AI 正按它自己十年前定下的时间表往前推。2025 年底，Anthropic 让 Claude Opus 4.5 做他们的工程师招聘考试——两小时的在线编程题。它得分超过了历届所有人类考生。这已经是两代模型以前的事了。一旦 AI agent 能包揽软件工程师的所有活，你就可以让它们做更多事，尤其是改进 AI 自己。这成了一个飞轮：更好的 AI → 更好的算法 → 更好的 AI。终点是 Dario Amodei 说的那个画面——"数据中心里的天才之国"：几十亿个虚拟研究助手，每个比人快一百倍，用来设计芯片、模拟机器人、筛选药物。</p>
+<p>当认知和体力活都被 AI 接管——在 Jones 教授研究了大半辈子的增长模型里——<strong>增长会爆炸</strong>。</p>
+<p><strong>场景二：历史的反驳。</strong></p>
+</div>
+<span class="pg">03</span>
+</section>
+
+<!-- 4 · 历史反驳 + 图片1 -->
+<section class="s" data-index="4">
+<span class="nm">03</span>
+<div class="txt rv">
+<p>Jones 教授放了一张图。他说，上过我课的人，这张图已经见过 37 次了。它画的是美国 150 年来的实际人均收入，对数坐标。几乎就是一条直线，斜率：每年 2%。</p>
+<p>在这 150 年里，电力来了，内燃机来了，抗生素、真空管、晶体管、半导体、信息技术、互联网——每一样都彻底改变了生活。<strong>但增长率从没超过每年 2%。</strong></p>
+</div>
+<div class="imgbx rv">
+<img src="./.claude/images/每年生活水平增长2%25.png" alt="每年 2%">
+<p class="cap">▲ 美国 150 年来的实际人均收入，画成对数坐标就是一条直线，斜率每年 2%</p>
+</div>
+<span class="pg">04</span>
+</section>
+
+<!-- 5 · 历史结论 + 二、薄弱环节 -->
+<section class="s" data-index="5">
+<span class="nm">04</span>
+<div class="txt rv">
+<p>不是因为它们不够重要。而是因为每一代新技术的真正作用，不是把增长往上推，而是<strong>拉着它别往下掉</strong>。蒸汽机尽了头，没有电力，增长就会下滑。电力尽了头，没有内燃机和半导体，增长还得下滑。每一场变革做的是同一件事：让 2% 这根线再往前延 50 年。</p>
+<p>所以对 AI 的真正"悲观"场景是：它不过是这一类技术的又一个——让 2% 的增长继续下去，不是让增长起飞。</p>
+<p>两个场景，一个问题：<strong>真实世界会落在哪里？</strong></p>
+<p><strong>二、薄弱环节：一个颠覆性的简单框架</strong></p>
+<p>为了回答这个问题，Jones 教授掏出了他琢磨了一年多的概念：<strong>薄弱环节（weak links）</strong>。</p>
+</div>
+<span class="pg">05</span>
+</section>
+
+<!-- 6 · O型环 + 推论 + 计算机例子 -->
+<section class="s" data-index="6">
+<span class="nm">05</span>
+<div class="txt rv">
+<p class="dc">一条链子能承受多少拉力，取决于它最弱的那一环。做生意也一样——你要发布一个产品，设计、采购、制造、物流、零售、法务、广告，哪一个环节掉链子，前面的努力就白费了。这不是比喻，这是物理意义上的事实：<strong>挑战者号航天飞机爆炸，因为一个二十五美元的橡胶 O 型环没扛住。</strong></p>
+<p>这个框架有个很厉害的推论：一条链子有二十个环，你把其中十七个加固到极致——没用，剩下三个最弱的拉住了整条链子。</p>
+<p>Jones 教授举了一个谁都能感觉得到的例子。</p>
+<p>你口袋里的手机，晶体管数量是你 1970 年那台电脑的 <strong>1 亿倍</strong>。但你干活没有快 1 亿倍，没有 100 倍，可能连 3 倍都不到。</p>
+</div>
+<span class="pg">06</span>
+</section>
+
+<!-- 7 · 为什么 + 引用 + 模型过渡 -->
+<section class="s" data-index="7">
+<span class="nm">06</span>
+<div class="txt rv">
+<p>为什么？因为你花在求逆矩阵上的工夫，在 1970 年可能占整个研究过程的 40%，今天几乎是 0%。但那就只是你工作里的一个环节。剩下那 60%——决定问什么问题、构建什么理论、怎么解释结果——没怎么变。所以计算机让你快了那么两三倍，离 1 亿倍差得远。</p>
+</div>
+<div class="pq rv" style="margin:2px 0 4px">"把一个环节做到极致是不够的，<br>你得把短板一块一块全补上。"</div>
+<div class="txt rv">
+<p>这就是为什么 Jones 教授的经济模型得出了那个让人坐不住的结果——</p>
+</div>
+<span class="pg">07</span>
+</section>
+
+<!-- 8 · 三、模型 + 无限软件 + 图片2 -->
+<section class="s" data-index="8">
+<span class="nm">07</span>
+<div class="txt rv">
+<p><strong>三、模型会说话：爆发了，但很慢</strong></p>
+<p>Jones 教授跟合作者建了一个增长模型，把两股力量同时塞了进去：一边是飞轮效应（自动化→新想法→更多自动化），一边是薄弱环节（瓶颈拖后腿）。然后用 1950 年代以来的美国数据校准，让它往前跑。</p>
+<p>跑之前，他先给了一个让人坐直的思想实验。</p>
+<p><strong>假设软件是无限的——零成本，要多少有多少——GDP 能增加多少？</strong></p>
+<p>软件大概占美国 GDP 的 2%。在薄弱环节模型里，无限软件只能让 GDP 增长 2%。不是 200%，不是 2000%，<strong>就是 2%</strong>。因为其他环节——制造、物流、法务、管理、医疗——还是那些短板。自动化的收益被薄弱环节全吞了。</p>
+</div>
+<div class="imgbx rv">
+<img src="./.claude/images/IT%20行业（计算机产业）增加值占%20GDP%20比重变化.png" alt="IT 份额">
+<p class="cap">▲ IT 行业增加值占 GDP 的比重变化：东西越充裕，回报份额反而越低</p>
+</div>
+<span class="pg">08</span>
+</section>
+
+<!-- 9 · 三个子场景 + 图片3 -->
+<section class="s" data-index="9">
+<span class="nm">08</span>
+<p class="rv">这个数字很冷酷，但它讲透了一个道理：<strong>你得把所有短板都补上，增长才能真正释放。</strong></p>
+<p class="rv">模型跑了三个子场景。</p>
+<p class="rv">第一个——机器最终什么都能做，包括产生新想法。资本拿走 100% 的 GDP，劳动力归零。<strong>增长飞向无穷。</strong></p>
+<p class="rv">第二个——3% 的任务留给人类。Carlsen 下棋，Messi 踢球，这类事我们大概永远想让人类干。结果人类自己成了最薄弱的一环。<strong>劳动力拿回 100% 的 GDP，但增长被人类进步速度卡死</strong>——很慢。</p>
+<p class="rv">第三个——中间路线。资本和劳动力维持历史上三分之一对三分之二的比例。</p>
+<div class="imgbx rv">
+<img src="./.claude/images/AI%20延续过往技术规律下的资本收入份额（(s_K)）演化预测.png" alt="资本份额">
+<p class="cap">▲ AI 延续过往技术规律的前提下，资本收入份额的演化预测</p>
+</div>
+<span class="pg">09</span>
+</section>
+
+<!-- 10 · 关键发现 + Jones 反思 + 图片4 -->
+<section class="s" data-index="10">
+<span class="nm">09</span>
+<p class="rv"><strong>关键看增长率的形状。</strong> 基准场景下，增长从 2% 开始往上走。但你看它走得多慢——到 2050 年，2.3%。到 2075 年，3% 左右。模型最终会加速到年增长 50%，但那要 <strong>几百年</strong>。</p>
+<p class="rv">Jones 教授自己说起来都有点无奈。他整个学术生涯就押在"那条直线不会变"上。而现在他亲手跑出来的所有模型都在说：增长最终会爆炸。<strong>但问题就出在"最终"这两个字上。</strong></p>
+<div class="imgbx rv">
+<img src="./.claude/images/沿用历史技术规律下%20AI%20对应的长期经济增速预测.png" alt="长期增速">
+<p class="cap">▲ 沿用历史技术规律，AI 对应的长期经济增速预测</p>
+</div>
+<span class="pg">10</span>
+</section>
+
+<!-- 11 · 激进场景 + 图片5 -->
+<section class="s" data-index="11">
+<span class="nm">10</span>
+<div class="txt rv">
+<p>他又跑了一个更激进的场景：如果 AI 不是历史的延续，而是彻底的断裂——整个经济从今天起以摩尔定律的速度升级（每年 10% 而非 3%）——结果呢？到 2050 年增长率超过 25%。这才是真正的爆炸。</p>
+<p><strong>但就算在最激进的场景里，爆炸也要 30 年。</strong></p>
+<p>三个现实世界的例子都在说同一件事：<strong>我们都高估了变革的速度。</strong> 自动驾驶——DARPA 2004 年第一届挑战赛，没有一辆车跑完全程。2005 年斯坦福赢了。二十年后的今天，旧金山有了自动驾驶出租车，湾区以外几乎见不到。放射科医师也是。软件工程也是——最有希望第一个被自动化的领域。你是一个公司的 CEO 或 CIO，你是让 Anthropic 一键部署到全公司，还是找一群靠得住的人慢慢推进？</p>
+</div>
+<div class="imgbx rv">
+<img src="./.claude/images/全行业摩尔定律化下%20AI%20对经济增速的三种预测.png" alt="摩尔定律">
+<p class="cap">▲ 全行业摩尔定律化的假设下，AI 对经济增速的三种预测</p>
+</div>
+<span class="pg">11</span>
+</section>
+
+<!-- 12 · 75年结论 + 四、风险 -->
+<section class="s" data-index="12">
+<span class="nm">11</span>
+<div class="txt rv">
+<p>Jones 教授得出了一个让人不太舒服的结论：<strong>你可能根本分不清自己活在哪个场景里——未来七十五年内，紫色、绿色、蓝色三条线几乎叠在一起。</strong></p>
+<p><strong>四、风险来得更快</strong></p>
+<p>薄弱环节模型有个让人后背发凉的对称性。向上走的时候，链条很慢——你得一个一个地把短板补上。向下垮的时候，链条脆得很。挑战者号就坏了一个 O 型环。<strong>断一环，全没了。</strong></p>
+<p>他说了两类风险。第一类，<strong>坏人的风险</strong>——好懂。GPT-8 或者 Opus 7，发布当天就会被越狱。如果有人让一个先知级的 AI 设计一种比埃博拉更致命、潜伏期三个月的病毒，AI 能把方案做出来。核武器到现在没搞出全球灾难，因为只有极少数人有红色按钮。<strong>如果八十亿人都有红色按钮——你保证没人按得下去？</strong></p>
+</div>
+<span class="pg">12</span>
+</section>
+
+<!-- 13 · 外星类比 + Mythos + 时间线 -->
+<section class="s" data-index="13">
+<span class="nm">12</span>
+<div class="txt rv">
+<p>第二类更微妙。它来自一个类比。假设今晚我们发现一艘宇宙飞船从冥王星方向飞向地球。历史上，高级文明遇到低级文明的时候，结果对后者来说都不太妙。伯克利的 Stuart Russell 问了一个能让你好几天睡不着的问题：<strong>"我们怎么才能永远控制住一个比我们强得多的东西？"</strong></p>
+<p>然后 Jones 教授给出了整场演讲里最让人不安的一个时间判断。他说，Mythos——Anthropic 没有公开发布的一个模型——在二十五年的老旧软件里发现了数千个漏洞，人类花了二十五年都没找到。<strong>六到十二个月内，开源版本就会出现。</strong></p>
+<p>电网、金融系统、生物实验室。"AI 已经能接近做到这些了。再等一两年、三年，以模型迭代的速度，这个问题就在眼前。"</p>
+</div>
+<p class="pq rv" style="font-size:36px">注意这个时间差：<strong>巨大的经济增长<br>可能要几十年后才来；<br>灾难性风险，<br>三年内就可能敲门。</strong></p>
+<span class="pg">13</span>
+</section>
+
+<!-- 14 · 五、丰裕世界（上） -->
+<section class="s" data-index="14">
+<span class="nm">13</span>
+<div class="txt rv">
+<p><strong>五、但至少它是一个丰裕的世界</strong></p>
+<p>听到这儿你可能会说：又是增长缓慢，又是风险逼近——那不就是悲观到底了？</p>
+<p>Jones 教授没这么看。他在最后留了一个出人意料的温和出口。模拟里，就算是中等场景，长期增长也会明显加速。那不是一个匮乏的世界，而是一个<strong>丰裕的世界</strong>——GDP 高到可以重新分配。那些退休的人并没有因为"失去了有意义的工作"而痛苦——他们很开心，他们去了"夏令营"，做陶艺，跟朋友在一起。他说他以后大概也是这样：做陶艺，唱歌，和一帮研究增长的老朋友坐在一块儿，让 AI 教他们最新的增长模型。</p>
+</div>
+<span class="pg">14</span>
+</section>
+
+<!-- 15 · 丰裕世界（下） -->
+<section class="s" data-index="15">
+<span class="nm">14</span>
+<div class="txt rv">
+<p>但他也知道，再分配是个<strong>政治经济学问题</strong>。美国曾经保证过贸易会让所有人受益，然后中国冲击来了，北卡罗来纳州的社区说垮就垮了。丰裕是必要条件，但不是充分条件。</p>
+<p>最后一个提问的观众来自 Google DeepMind。他对 Jones 教授说：你的模型是不是从一开始就假设 AI 是渐进演进的？如果你这个假设错了呢？Jones 教授的回答很坦然："这正是论文的重点。我人就在硅谷，每天读到'世界明天就会改变'——我对这种可能性完全开放。但跟我说'三年改变一切'的那些人，二十年前也是这么讲自动驾驶的。"</p>
+</div>
+<span class="pg">16</span>
+</section>
+
+<!-- 16 · 数字 + 结语 -->
+<section class="s" data-index="15" style="justify-content:center">
+<span class="nm">15</span>
+<p class="mt rv" style="text-align:center">几 个 数 字 记 住 这 场 演 讲</p>
+<div class="ar rv" style="margin:0 auto 6px"></div>
+<div style="flex:0 0 auto;display:flex;flex-direction:column;gap:3px" class="rv">
+<p class="sm" style="margin-bottom:2px"><strong style="color:var(--cr)">2%</strong> —— 美国 150 年没变过的年增长率，AI 也许只是让它再延续 50 年的新技术</p>
+<p class="sm" style="margin-bottom:2px"><strong style="color:var(--cr)">2%</strong> —— 无限软件能带来的 GDP 增长上限，因为剩下全是短板</p>
+<p class="sm" style="margin-bottom:2px"><strong style="color:var(--cr)">1 亿倍</strong> —— 口袋里的晶体管比 1970 年多了这么多，但你的效率远没有提高 1 亿倍</p>
+<p class="sm" style="margin-bottom:2px"><strong style="color:var(--cr)">4.5% → 3%</strong> —— 计算机在 GDP 中的份额其实是<strong>在下降</strong>——东西越充裕，回报份额反而越低</p>
+<p class="sm" style="margin-bottom:2px"><strong style="color:var(--cr)">75 年</strong> —— 未来四分之三个世纪里，三条增长曲线几乎叠在一起，你分不清自己在哪个剧本里</p>
+<p class="sm" style="margin-bottom:2px"><strong style="color:var(--cr)">30 年</strong> —— 就算最激进的场景，增长爆炸也要这么久</p>
+<p class="sm" style="margin-bottom:0"><strong style="color:var(--cr)">3 年</strong> —— 灾难性风险可能变成现实的时间窗口</p>
+</div>
+<p class="rv" style="text-align:center;font-size:38px;color:var(--t1);margin:10px 0 0">"我可能两年内就被自动化了。你们大概还能安全十五年。<strong style="color:var(--cr)">持有标普 500。</strong>"</p>
+<p class="rv xs" style="text-align:center;color:#999;font-style:italic">停了一下。"十五年后，一切皆有可能。"</p>
+<span class="pg">16</span>
+</section>
+
+</div></div>
+
+<div class="nav">
+<button id="p">◀</button>
+<button id="n">▶</button>
+</div>
+<div class="page-counter" id="counter">1/16</div>
+
+<script>(function() {
+    var stage = document.getElementById('stage');
+    var slides = document.querySelectorAll('.s');
+    var counter = document.getElementById('pgcnt');
+    var cur = 0, tot = slides.length;
+
+    function resize() {
+        var s = Math.min(innerWidth/1080, innerHeight/1440) * 0.94;
+        stage.style.transform = 'scale(' + s + ')';
+    }
+
+    function go(i) {
+        if (i < 0) i = 0;
+        if (i >= tot) i = tot - 1;
+        if (i === cur) return;
+        for (var j = 0; j < tot; j++) {
+            slides[j].classList.toggle('active', j === i);
+        }
+        cur = i;
+        counter.textContent = (cur + 1) + '/' + tot;
+        var a = slides[cur];
+        a.style.transition = 'none';
+        a.style.opacity = '0.99';
+        requestAnimationFrame(function() {
+            a.style.transition = '';
+            a.style.opacity = '';
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(cur - 1);
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') go(cur + 1);
+    });
+
+    document.getElementById('p').addEventListener('click', function() { go(cur - 1); });
+    document.getElementById('n').addEventListener('click', function() { go(cur + 1); });
+
+    var tx = 0;
+    stage.addEventListener('touchstart', function(e) { tx = e.changedTouches[0].screenX; });
+    stage.addEventListener('touchend', function(e) {
+        var d = tx - e.changedTouches[0].screenX;
+        if (Math.abs(d) > 60) d > 0 ? go(cur + 1) : go(cur - 1);
+    });
+
+    resize();
+    window.addEventListener('resize', resize);
+    counter.textContent = '1/' + tot;
+
+    for (var k = 0; k < tot; k++) {
+        var pg = slides[k].querySelector('.pg');
+        if (pg) {
+            pg.textContent = (k + 1).toString().padStart(2,'0') + '/' + tot.toString().padStart(2,'0');
+        }
+    }
+})();</script>
+</body>
+</html>

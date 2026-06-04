@@ -1,0 +1,20 @@
+{
+  "name": "3-4-card-presets",
+  "version": "1.0.0",
+  "description": "> 基于 [frontend-slides](https://github.com/zarazhangrui/frontend-slides) 项目的 12 套视觉预设，改造为 3:4 比例（1080×1440）的图文卡片 HTML 模板。 >  > 单文件、零外部依赖（字体除外），适合移动端阅读、社交媒体卡片、知识卡片、简报等场景。",
+  "main": "screenshot.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "playwright": "^1.60.0"
+  }
+}
