@@ -1,4 +1,4 @@
-# 3:4 图文卡片设计系统
+# 小红书3:4 图文卡片设计系统
 
 > 基于 [frontend-slides](https://github.com/zarazhangrui/frontend-slides) 项目的 12 套视觉预设，改造为 3:4 比例（1080×1440）的图文卡片 HTML 模板。
 > 
